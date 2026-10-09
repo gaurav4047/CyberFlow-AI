@@ -6,7 +6,12 @@ import sqlite3
 from typing import Any
 from uuid import uuid4
 
-DATA_DIR = Path(__file__).resolve().parents[1] / "data"
+import os
+
+if os.environ.get("VERCEL"):
+    DATA_DIR = Path("/tmp/cyberflow_data")
+else:
+    DATA_DIR = Path(os.environ.get("DATA_DIR", Path(__file__).resolve().parents[1] / "data"))
 DATABASE_PATH = DATA_DIR / "cyberflow.db"
 
 
