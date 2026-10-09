@@ -4,7 +4,6 @@ import {
   AlertCircle,
   ArrowDownRight,
   ArrowRight,
-  AudioLines,
   CheckCircle2,
   ChevronDown,
   CircleHelp,
@@ -14,7 +13,6 @@ import {
   LayoutDashboard,
   LoaderCircle,
   LockKeyhole,
-  Mic2,
   Play,
   Radar,
   Settings,
@@ -242,11 +240,6 @@ function App() {
         </div>
 
         <div className="sidebar-spacer" />
-        <div className="voice-card">
-          <span className="voice-card-icon"><AudioLines size={17} /></span>
-          <div><strong>Voice-first security</strong><p>Dictate directly in CTF Analyst.</p></div>
-          <span className="voice-wave" aria-hidden="true"><i /><i /><i /><i /><i /></span>
-        </div>
         <div className="sidebar-bottom">
           <SidebarLink item={{ label: 'Settings', path: '/settings', icon: Settings }} />
           <div className="profile-row" aria-label="Signed in as Guest researcher">
@@ -309,14 +302,14 @@ function Dashboard({ health, healthError, checking, onCheck, overview, onRefresh
       <div className="hero-orb orb-one" /><div className="hero-orb orb-two" /><div className="hero-grid" />
       <div className="hero-content">
         <div className="hero-kicker"><Sparkles size={13} /> YOUR SECURITY OPERATIONS, IN FLOW</div>
-        <h2>Think like an analyst.<br /><span>Move at the speed of voice.</span></h2>
+        <h2>Think like an analyst.<br /><span>Move at the speed of security.</span></h2>
         <p>One focused workspace for finding flags, writing clear reports, and making sense of security alerts.</p>
         <div className="hero-foot"><span className="hero-status"><span className="status-dot" /> WORKSPACE ONLINE</span><span className="hero-foot-divider" /><span>BUILT FOR SECURITY RESEARCHERS</span></div>
       </div>
       <div className="hero-visual" aria-hidden="true">
         <div className="orbit orbit-a" /><div className="orbit orbit-b" /><div className="orbit orbit-c" />
         <div className="visual-core"><Shield size={36} strokeWidth={1.15} /><span className="core-spark">✳</span></div>
-        <div className="visual-chip chip-one"><AudioLines size={15} /><span>DICTATION READY</span></div>
+        <div className="visual-chip chip-one"><TerminalSquare size={15} /><span>WORKFLOW READY</span></div>
         <div className="visual-chip chip-two"><span className="status-dot" /><span>SECURE SESSION</span></div>
         <span className="visual-cross cross-one">+</span><span className="visual-cross cross-two">+</span>
       </div>
@@ -347,7 +340,6 @@ function Dashboard({ health, healthError, checking, onCheck, overview, onRefresh
       </div>
     </section>
     <div className="dashboard-lower"><CommandRouter/><section className="panel recent-panel"><div className="panel-header"><div><h3>Recent activity</h3><p>FROM YOUR LOCAL DATABASE</p></div></div>{overview?.recent_activity.length ? overview.recent_activity.map(item => <Link className="recent-row" key={item.id} to="/history"><strong>{item.title}</strong><small>{item.agent.replace('_',' ')} · {new Date(item.created_at).toLocaleString()}</small></Link>) : <p className="muted-empty">{overview ? 'No saved investigations yet. Results appear here after you save them.' : 'Could not load workspace activity.'}</p>}</section></div>
-    <div className="voice-banner"><div className="voice-banner-mark"><AudioLines size={18} /></div><div className="voice-banner-copy"><strong>Made for the way security researchers think.</strong><span>Use Wispr Flow to insert dictated text into any focused input. Normal typing and paste work too.</span></div><span className="voice-banner-tag">VOICE-FIRST <span>·</span> HUMAN-LED</span></div>
   </>
 }
 
@@ -465,14 +457,13 @@ function CtfAnalystPage() {
             value={commandInput}
             onChange={(event) => setCommandInput(event.target.value)}
             maxLength={6000}
-            placeholder="Click here and dictate using Wispr Flow, or type your command..."
+            placeholder="Type your command, terminal output, or challenge notes..."
             aria-label="Commands, output, or notes"
             required
             spellCheck={false}
           />
           <span className="character-count">{commandInput.length.toLocaleString()} / 6,000</span>
         </label>
-        <div className="wispr-tip"><span className="wispr-tip-icon"><Mic2 size={14} /></span><span><strong>Using Wispr Flow on Mac?</strong><small>Click in the command box, then hold Fn to dictate. Press Fn + Space for hands-free dictation. Wispr Flow inserts text into the focused field; no official API integration is used.</small></span></div>
         {error && <div className="ctf-error" role="alert"><AlertCircle size={15} /><span>{error}</span></div>}
         <div className="ctf-actions">
           <button className="analyze-button" type="submit" disabled={busy !== null || !commandInput.trim()}>
@@ -518,10 +509,9 @@ function SettingsPage({ health, healthError, checking, onCheck }: { health: Heal
       <div className="settings-service"><span className="settings-service-icon db-settings-icon"><LockKeyhole size={17} /></span><div className="settings-service-main"><strong>SQLite database</strong><small>backend/data/cyberflow.db</small></div><span className={`settings-service-status ${health?.database === 'ok' ? 'good' : healthError ? 'bad' : ''}`}><span />{health?.database === 'ok' ? 'Connected' : healthError ? 'Unavailable' : 'Checking'}</span></div>
       <div className="settings-footnote"><CircleHelp size={14} />Service status comes from a live request to your local API.</div>
     </div>
-    <div className="settings-section"><div className="settings-section-heading"><div><h2>AI and voice</h2><p>Configuration is read by the backend. Secrets are never sent to the browser.</p></div></div>
+    <div className="settings-section"><div className="settings-section-heading"><div><h2>AI Configuration</h2><p>Configuration is read by the backend. Secrets are never sent to the browser.</p></div></div>
       <div className="settings-service"><span className="settings-service-icon"><Sparkles size={17}/></span><div className="settings-service-main"><strong>AI provider</strong><small>{settings?.provider ?? 'Checking'} · {settings?.mode ?? 'Loading mode'}</small></div><span className={`settings-service-status ${settings?.ai_configured ? 'good' : ''}`}><span/>{settings?.ai_configured ? 'Configured' : settings ? 'Demo mode' : 'Checking'}</span></div>
       <div className="settings-service"><span className="settings-service-icon"><TerminalSquare size={17}/></span><div className="settings-service-main"><strong>Configured model</strong><small>{settings?.model ?? 'Loading'} · Application version {settings?.version ?? '—'}</small></div><span className="settings-service-status">Backend setting</span></div>
-      <div className="settings-service"><span className="settings-service-icon"><Mic2 size={17}/></span><div className="settings-service-main"><strong>Wispr Flow on macOS</strong><small>Click a normal text field, start Wispr Flow with your configured shortcut, dictate, verify the inserted text, then submit. Typing and paste work without Wispr Flow. This is desktop text insertion, not an official Wispr Flow API integration.</small></div></div>
     </div>
     <div className="settings-section danger-section"><div className="settings-section-heading"><div><h2>Local data</h2><p>Stored investigations and reports are on this device.</p></div><button className="outline-button danger-button" type="button" onClick={() => void clearData()}>Clear local data</button></div>{clearState && <p className="success-note">{clearState}</p>}{clearError && <div className="ctf-error">{clearError}</div>}</div>
   </div>
